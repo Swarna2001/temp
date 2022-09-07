@@ -21,8 +21,9 @@ ax2 = fig.add_subplot(212)
 fig = sm.graphics.tsa.plot_pacf(data, method='ywm', lags=8, ax=ax2)
 fig.savefig('plot.png')
 
-arma_22 = ARIMA(data, order=(2, 0, 2)).fit()
-print(arma_22.params)
+arma = ARIMA(data, order=(1, 0, 1)).fit()
+print(arma.params)
 
-arma_22 = ARIMA(data, order=(2, 1, 2)).fit()
-print(arma_22.params)
+arima = ARIMA(data, order=(2, 1, 2)).fit()
+print(arima.params)
+print(f"ARIMA Prediction for 2023 stock is {arima.predict(2023)}")
