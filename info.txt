@@ -4,4 +4,8 @@
 4. EOQ with no setup cost - eoq_with_no_setup_cost.py
 5. EOQ with price breaks - eoq_with_price_breaks.py
 6. EOQ with setup cost - eoq_with_setup_cost.py
-7. 
+7. Euler Method - euler_method.py
+8. Interpolation - interpolation.py
+9. Lagrange - lag.py
+10. Needleman Wunch - needleman_wunch.py
+11. Portfolio - portfolio_management.py
