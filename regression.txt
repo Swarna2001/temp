@@ -1,74 +1,78 @@
 import numpy as np
-import statistics
-import math
 import matplotlib.pyplot as plt
-from sklearn.linear_model import LinearRegression
 
-def measures(y, y_cap):
-  n=len👍
-  sse = 0
-  sst = 0
-  y_bar = sum(y)/n
-  for i in range(n):
-    diff = y[i] - y_cap[i]
-    sse += (y[i] - y_cap[i]) * (y[i] - y_cap[i])
-    sst += (y[i] - y_bar) * (y[i] - y_bar)
+def draw_plot(x,y):
+  plt.plot(x,y)
+  plt.show()
+  
+def linear_regression(x, y):
+	x, y = np.array(x), np.array(y)
+	n = np.size(x)
+	m_x = np.mean(x)
+	m_y = np.mean(y)
+	SS_xy = np.sum(y*x) - n*m_y*m_x
+	SS_xx = np.sum(x*x) - n*m_x*m_x
+	b_1 = SS_xy / SS_xx
+	b_0 = m_y - b_1*m_x
+	return (b_0, b_1)
+  
+def plot_regression_line(x, y, b):
+	x, y = np.array(x), np.array(y)
+	plt.scatter(x, y, color = "m", marker = "o", s = 30)
+	y_pred = b[0] + b[1]*x
+	plt.plot(x, y_pred, color = "g")
+	plt.xlabel('x')
+	plt.ylabel('y')
+	plt.show()
 
-  correlation = 1-(sse/sst)
-  return sse, sst, correlation
+def plot_predicted_actual_values(x, scatter_plot_y, linear_plot_y):
+	plt.scatter(x, scatter_plot_y, color = "r", marker = "o", s = 30)
+	plt.plot(x, linear_plot_y, color = "g")
+	plt.xlabel('x')
+	plt.ylabel('y')
+	plt.show()
 
+from common import linear_regression, plot_regression_line
+from sklearn.metrics import r2_score
+from scipy import stats
 
-def linear_reg(x,y):
-  n=len(x)
-  xy = np.dot(np.array(x),np.array(y))
+x = [ 200, 250, 200, 250, 189.65, 260.35, 225, 225, 225, 225, 225, 225 ]
+y = [ 43, 78, 69, 73, 48, 78, 65, 74, 76, 79, 83, 81 ]
 
-  x_sq = 0
-  for i in x:
-    x_sq+=i**2
+# Linear Regression
+coeff = linear_regression(x,y)
+print(coeff)
+plot_regression_line(x,y,coeff)
 
+# Lack of fit test
+predicted = [v*coeff[1] + coeff[0] for v in x]
+print(f"r2 score : {r2_score(y, predicted)}")
+print(f"t_test : {stats.ttest_ind(y, predicted)}")
 
-  a = (((n*xy) - (sum(x)*sum(y))) /((n*x_sq) - (pow(sum(x),2))))
-  b = ((sum(y) -(a*sum(x)))/n)
+from common import linear_regression, plot_regression_line
+from scipy import stats
 
-  return a,b
+x1 = [195, 255, 195, 255, 255, 255, 255, 195, 255, 255, 255, 255, 255, 340]
+x2 = [4, 4, 4.6, 4.6, 4.2, 4.1, 4.6, 4.3, 4.3, 4, 4.7, 4.3, 4.72, 4.3]
 
+#x2 = [i*(10**14) for i in x2]
 
-def multiple_lin_reg(x,y, x_pred):
-  b = np.matmul(np.linalg.inv(np.matmul(x.transpose(), x)), np.matmul(x.transpose(), y))
-  return np.multiply(np.repeat([b], repeats = x_pred.shape[0], axis = 0), x_pred).sum(axis=1)
+y = [1004, 1636, 852, 1506, 1272, 1270, 1269, 903, 1555, 1260, 1146, 1276, 1225, 1321]
 
-#linear reg
+"""
+coeff = multiple_regression([x1,x2], y)
+print(f"Coefficient of x1,x2 = {coeff}")
+"""
+# Linear Regression b/w drive-in and gain
+x1_y_coeff = linear_regression(x1, y)
+plot_regression_line(x1, y, x1_y_coeff)
 
-x=[200,250,200,250,189.65,260.35,225,225,225,225,225,225]
-y=[43,78,69,73,48,78,65,74,76,79,83,81]
+# Lack of fit test
+print(stats.ttest_ind(y, [x1_y_coeff[1]*v+x1_y_coeff[0] for v in x1]))
 
-a,b = linear_reg(x,y)
-print(a)
-print(b)
-y_cap = [((a*i)+b) for i in x]
-print(y_cap)
+# Linear Regression b/w emittor-dose and gain
+x2_y_coeff = linear_regression(x2, y)
+plot_regression_line(x2, y, x2_y_coeff)
 
-
-sse, sst, correlation = measures(y,y_cap)
-print(correlation)
-print(sse)
-print(sst)
-
-
-#multi lin reg
-
-x1 = np.array([1.26926382, -9.43542734, 7.59084266, 7.52067092, -13.94486326,  11.63625102,   9.56782929 ,  1.87002637 ])
-x2 = np.array([-8.97613991, 1.26926382, -9.43542734, 7.59084266, 7.52067092, -13.94486326,  11.63625102,   9.56782929])
-y = np.array([ -9.43542734, 7.59084266, 7.52067092, -13.94486326,  11.63625102,   9.56782929 ,  1.87002637,  -7.09845358])
-
-x0 = np.ones(len(x1))
-x = np.stack((x0,x1,x2), axis = 1)
-y_pred = multiple_lin_reg(x, y, x)
-print(y_pred)
-
-
-
-# b = np.log(a)
-# a = math.exp(b)
-
-# r2 = np.corrcoef(x,y)
+# Lack of fit test
+print(stats.ttest_ind(y, [x2_y_coeff[1]*v+x2_y_coeff[0] for v in x2]))
