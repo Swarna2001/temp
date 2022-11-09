@@ -16,3 +16,5 @@
 16. Simpson rule - simpson_rule.py
 17. Seasonality - seasonal.py
 18. Regression - regression.txt
+
+link - https://raw.githubusercontent.com/Swarna2001/temp/main/lag.py
