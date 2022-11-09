@@ -1,0 +1,7 @@
+1. ARMA - arma.txt
+2. ARIMA - arma.txt
+3. Classical EOQ - classical_eoq.py
+4. EOQ with no setup cost - eoq_with_no_setup_cost.py
+5. EOQ with price breaks - eoq_with_price_breaks.py
+6. EOQ with setup cost - eoq_with_setup_cost.py
+7. 
