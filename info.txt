@@ -9,3 +9,10 @@
 9. Lagrange - lag.py
 10. Needleman Wunch - needleman_wunch.py
 11. Portfolio - portfolio_management.py
+12. Predictor connector - predictor_connector.py
+13. Range kutta - range_kutta.py 
+14. Trapezoidal - trapezoidal.py
+15. Smith Waterman - smith_waterman.py
+16. Simpson rule - simpson_rule.py
+17. Seasonality - seasonal.py
+18. Regression - regression.txt
